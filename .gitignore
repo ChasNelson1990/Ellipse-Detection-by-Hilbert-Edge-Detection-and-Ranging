@@ -1,0 +1,11 @@
+**/images/
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.tiff
+*.tif
+*.pdf
+*.fig
+*.mat
+*.dat
