@@ -59,8 +59,8 @@ end
 
 %% Set Up
 [m,n] = size(im);
-lStepNumber = ceil((maxLength-minLength+1)/resLength);
-lengthSteps = linspace(minLength,maxLength,lStepNumber);
+lStepNumber = ceil((maxLength)/resLength);
+lengthSteps = linspace(1,maxLength,lStepNumber);
 aStepNumber = ceil(180/resAngular);
 angularSteps = linspace(0,180,aStepNumber+1);
 angularSteps(end) = [];
@@ -89,19 +89,19 @@ signals = reshape(granulometricSignals,[],size(granulometricSignals,3),size(gran
 hilbdrop=zeros(m*n,size(granulometricSignals,4));
 gap=zeros(m*n,size(granulometricSignals,4));
 for ti = 1:size(signals,3)
-    signal = squeeze(signals(:,:,ti))';
-    h = hilbert([signal(1,:);signal;signal(end,:)]);
-    h = h(2:end-1,:);
-    hi = imag(h);
-    [~,hmi] = max(hi);
+    signal = squeeze(signals(:,:,ti))';%all signals in this orientation
+    h = hilbert([signal(1,:);signal;signal(end,:)]);%Analytic Signal, note the boundary padding
+    hi = imag(h(2:end-1,:));%Hilbert Transform (imaginary component of AS), note removes boundary padding
+    [~,hmi] = max(hi);%position of maximum
     hmi(hi(1,:)>=0)=1;%catch for pixels caught between two ellipses
     mask = repmat((1:size(granulometricSignals,3))',1,size(signal,2));
     mask2 = repmat(hmi,size(signal,1),1);
-    mask = (mask<mask2);
-    high = sum(signal.*mask)./hmi;
-    low = sum(signal.*(~mask))./-(hmi-size(signals,3));
-    gap(:,ti) = high-low;
-    hilbdrop(:,ti) = squeeze(hmi)';
+    mask = (mask<mask2);%mask of signals below their respective maximum index
+    high = sum(signal.*mask)./hmi;%average value of first part of step
+    low = sum(signal.*(~mask))./-(hmi-size(signals,3));%average value of lower part of step
+    low(hmi==size(signals,3))=0;%catch for infite signals
+    gap(:,ti) = high-low;%size of step gap
+    hilbdrop(:,ti) = squeeze(hmi)';%step position
     clear signal ti h hi hmi mask mask2 high low
 end
 hilbdrop = reshape(hilbdrop,size(granulometricSignals,1),size(granulometricSignals,2),size(granulometricSignals,4));
