@@ -1,10 +1,10 @@
 ## Ellipse Detection by Hilbert-Edge Detection and Ranging (HEDAR)
-This repository contains our implementation for the paper "Ellipse Detection by Hilbert-Edge Detection and Ranging (HEDAR)"
+This repository contains our implementation for the paper "Ellipse Detection by Hilbert-Edge Detection and Ranging (HEDAR)" (submitted for publication)
 
 - by **Carl J. Nelson, Philip T. G. Jackson and Boguslaw Obara**
 
 ## Overview
-This repository provides a MATLAB implementation for detecting ellipses and ellipse-like objectsin 2D greyscale images.
+This repository provides a MATLAB implementation for detecting ellipses and ellipse-like objects in 2D greyscale images.
 
 This project contains three MATLAB functions:
 1. Main HEDAR code, see Algorithm 2 in the paper (hedar.m)
@@ -14,7 +14,7 @@ This project contains three MATLAB functions:
 For general usage:
 - Open MATLAB, right click project directory and add to path.
 - From the command prompt, call `data=hedar(im);` to run on image `im` with default options.
-- Alternatively, define the parameters, as discussed in the paper and the code preamble.
+- Alternatively, define the parameters, as discussed in the paper (submitted) and the code preamble.
 
 ## License
 This code is licensed under the GNU General Public License Version 3.
