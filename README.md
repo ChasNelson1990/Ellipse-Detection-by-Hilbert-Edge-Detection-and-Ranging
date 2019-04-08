@@ -1,5 +1,5 @@
 ## Ellipse Detection by Hilbert-Edge Detection and Ranging (HEDAR)
-This repository contains our implementation for the paper "Ellipse Detection by Hilbert-Edge Detection and Ranging (HEDAR)" (submitted for publication)
+This repository contains a MATLAB implementation of our HEDAR method as used in the paper "Combining Mathematical Morphology and the Hilbert Transform for Fully Automatic Nuclei Detection in Fluorescence Microscopy" (submitted to LNCS)
 
 - by **Carl J. Nelson, Philip T. G. Jackson and Boguslaw Obara**
 
@@ -8,7 +8,6 @@ This repository provides a MATLAB implementation for detecting ellipses and elli
 
 This project contains three MATLAB functions:
 1. Main HEDAR code, see Algorithm 2 in the paper (hedar.m)
-2. A modified version of MATLAB's imerode (moderode.m)
 3. A helper function that creates binary images of ellipses (ellipse2.m)
 
 For general usage:

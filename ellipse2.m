@@ -41,29 +41,35 @@ else
     m = sz; n = sz;
 end
 x0 = pos(1); y0 = pos(2);
+major = major / 2; % radii rather than diameters
+minor = minor / 2;
 clear sz pos
 
 %% Set-Up
 bw = zeros(m,n);
 
-%% Circumference & Parameterisation in Theta
-h = (major-minor)^2/(major+minor)^2;
-circ = pi*(major+minor)*(1+((3*h)/(10+sqrt(4-(3*h)))));%Approximate (Ramanujan, 1914)
-theta = linspace(0,2*pi,100*round(circ));
+ind = 1:(m*n); % linear indices of all pixels in bw
+[I,J] = ind2sub([m,n], ind);
 
-%% Calculate Ellipse Outline Pixels
-x = x0 + 0.5*(major*cos(theta)*cosd(-phi) - minor*sin(theta)*sind(-phi));
-y = y0 + 0.5*(major*cos(theta)*sind(-phi) + minor*sin(theta)*cosd(-phi));
+boxmask = (abs(I-y0)<major) & (abs(J-x0)<major); % a bounding box enclosing the ellipse (should make the function slightly faster by only considering these pixels)
 
-%% Boundary Issues
-x(x<1) = 1; y(y<1) = 1;
-x(x>n) = n; y(y>m) = m;
+Ibox = I(boxmask);
+Jbox = J(boxmask);
 
-%% Draw Outline
-idx = sub2ind(size(bw),round(y),round(x));
-bw(idx) = 1;
+%% Transform coordinates:
+Iellipse = Ibox - y0; % translating coordinates
+Jellipse = Jbox - x0;
 
-%% Fill Ellipse
-bw = imfill(bw,'holes');
+rotmat = [cosd(-phi),sind(-phi);-sind(-phi),cosd(-phi)]; % rotation matrix
+IJellipse = [Iellipse',Jellipse'] * rotmat; % coordinates of box pixels in the ellipse's coordinate frame
+
+%% Ellipse equation:
+ellipsemask = (IJellipse(:,2).^2 ./ (major.^2)) + (IJellipse(:,1).^2 ./ (minor.^2)) < 1; % binary mask for Ibox and Jbox, indicating which pixels lie inside the ellipse
+
+%% Draw ellipse:
+Iellipse = Ibox(ellipsemask');
+Jellipse = Jbox(ellipsemask');
+ellilpseIdx = sub2ind([m,n], Iellipse, Jellipse); % linear indices of ellipse pixels in bw
+bw(ellilpseIdx) = 1;
 
 end
